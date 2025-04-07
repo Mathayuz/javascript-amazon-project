@@ -41,7 +41,7 @@ products.forEach((product) => {
 
       <div class="product-spacer"></div>
 
-      <div class="added-to-cart">
+      <div class="added-to-cart js-added-to-cart-${product.id}">
         <img src="images/icons/checkmark.png">
         Added
       </div>
@@ -89,6 +89,19 @@ document.querySelectorAll('.js-add-to-cart')
 
       console.log(cartQuantity);
       console.log(cart);
+
+      const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
+
+      // Mostra a mensagem
+      addedMessage.classList.add("added-to-cart-clicked");
+
+      // Limpa o timeout anterior, se existir
+      clearTimeout(addedMessage.timeoutId);
+
+      // Cria novo timeout e salva no próprio elemento
+      addedMessage.timeoutId = setTimeout(() => {
+        addedMessage.classList.remove("added-to-cart-clicked");
+      }, 2000);
 
     });
   });

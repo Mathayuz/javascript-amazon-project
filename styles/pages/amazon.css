@@ -131,17 +131,21 @@
 }
 
 .added-to-cart {
+  margin-bottom: 8px;
+  /* At first, the "Added to cart" message will
+     be invisible. Use JavaScript to change the
+     opacity and make it visible. */
+  opacity: 0;
+}
+
+.added-to-cart-clicked {
   color: rgb(6, 125, 98);
   font-size: 16px;
 
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
 
-  /* At first, the "Added to cart" message will
-     be invisible. Use JavaScript to change the
-     opacity and make it visible. */
-  opacity: 0;
+  opacity: 1;
 }
 
 .added-to-cart img {
