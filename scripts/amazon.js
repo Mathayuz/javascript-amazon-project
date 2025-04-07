@@ -1,4 +1,4 @@
-import {cart} from '../data/cart.js';
+import {cart, addToCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 
 let productsHTML = '';
@@ -59,52 +59,39 @@ products.forEach((product) => {
 
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
+function updateCartQuantity() {
+  let cartQuantity = 0;
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+
+  document.querySelector('.js-cart-quantity')
+    .innerHTML = cartQuantity;
+}
+
+function controlTimeout(productId) {
+  const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
+
+  // Mostra a mensagem
+  addedMessage.classList.add("added-to-cart-clicked");
+
+  // Limpa o timeout anterior, se existir
+  clearTimeout(addedMessage.timeoutId);
+
+  // Cria novo timeout e salva no próprio elemento
+  addedMessage.timeoutId = setTimeout(() => {
+    addedMessage.classList.remove("added-to-cart-clicked");
+  }, 2000);
+}
+
 document.querySelectorAll('.js-add-to-cart')
   .forEach((button) => {
     button.addEventListener('click', () => {
       const { productId } = button.dataset;
       const quantity = Number(document.querySelector(`.js-quantity-selector-${productId}`).value);
-      let matchingItem;
 
-      cart.forEach((item) => {
-        if (productId === item.productId) {
-          matchingItem = item;
-        }
-      });
-
-      if (matchingItem) {
-        matchingItem.quantity += quantity;
-      } else {
-        cart.push({
-          productId,
-          quantity
-        });
-      };
-
-      let cartQuantity = 0;
-
-      cart.forEach((item) => {
-        cartQuantity += item.quantity;
-      });
-
-      document.querySelector('.js-cart-quantity')
-        .innerHTML = cartQuantity;
-
-      console.log(cartQuantity);
-      console.log(cart);
-
-      const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
-
-      // Mostra a mensagem
-      addedMessage.classList.add("added-to-cart-clicked");
-
-      // Limpa o timeout anterior, se existir
-      clearTimeout(addedMessage.timeoutId);
-
-      // Cria novo timeout e salva no próprio elemento
-      addedMessage.timeoutId = setTimeout(() => {
-        addedMessage.classList.remove("added-to-cart-clicked");
-      }, 2000);
-
+      addToCart(productId, quantity);
+      updateCartQuantity();
+      controlTimeout(productId);
     });
   });
